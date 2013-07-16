@@ -1,0 +1,42 @@
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd   
+        http://www.directwebremoting.org/schema/spring-dwr    
+        http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">  
+  
+    <context:annotation-config />  
+      
+    <!-- 注意这里新增加的dwr tag, 为使其生效，文件头中要声明namespace -->  
+    <dwr:annotation-config id="dwr_as"/>  
+    <dwr:url-mapping />  
+      
+    <!-- 部署项目时, 请把debug设为false -->  
+    <dwr:controller id="dwrController" debug="true" />  
+      
+    <!-- 多个包名用逗号隔开, 但不能有空格 -->  
+    <context:component-scan base-package="com.myapp.web.controller" />  
+      
+    <!-- order值越小, 优先级越高 -->  
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">  
+        <property name="order" value="1" />  
+    </bean>  
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">  
+        <property name="order" value="2" />  
+    </bean>  
+      <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	 <property name="order" value="3" /> 
+	  <property value="true" name="alwaysUseFullPath"></property>
+	  <property name="mappings">
+	    <props>
+	      <prop key="/dwr/**">dwrController</prop>
+	    </props>
+	 </property>
+	</bean> 
+      
+ </beans>  
